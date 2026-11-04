@@ -67,24 +67,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        cargarListaContactos();
+    }
+
     public void crearContacto()
     {
         String nombre_actual = String.valueOf(input_nombre.getText());
         String telefono_actual = String.valueOf(input_telefono.getText());
 
         ContactosSQLOpenHelper admin = new ContactosSQLOpenHelper(this);
+        //CREAR EL CONTACTO A LA BASE DE DATOS
         SQLiteDatabase db = admin.getWritableDatabase(); //como necesitamos escribir es writable
 
         if (nombre_actual.isEmpty() == false & telefono_actual.isEmpty() == false)
         {
             //escribieron algo en telefono o nombre entonces agregamos
-            ContentValues registro = new ContentValues();
-            registro.put("nombre", nombre_actual);
+            ContentValues registro = new ContentValues(); //VALORES PARA INSERTAR O ACTUALIZAR
+            registro.put("nombre", nombre_actual); //COLUMNA (NOMBRE Y VALOR)
             registro.put("telefono", telefono_actual);
 
             //insertar este registro en la base de datos
             db.insert("contactos", null, registro);
-            db.close();
+            db.close(); //SIEMPRE CERRAR CONEXIÓN A BASE DE DATOS DESPUES DE HACER UNA CONSULTA
 
             //restablecer inputs
             input_telefono.setText("");
@@ -107,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> listaContactos = new ArrayList<>();
         id_contactos = new ArrayList<>();
         //Preparar consulta para el Select
-        Cursor fila = db.rawQuery("SELECT nombre,telefono, id FROM contactos", null);
+        Cursor fila = db.rawQuery("SELECT nombre,telefono, id FROM contactos", null); //CONSULTAS NORMALES
 
-        if (fila.moveToFirst())
+        if (fila.moveToFirst()) //PARA EJECUTAR SI O SI
         {
             do
             {
@@ -117,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
                 String contacto_texto = "Nombre : "+fila.getString(0)+" //// Telefono : "+fila.getString(1);
                 listaContactos.add(contacto_texto);
                 id_contactos.add(fila.getInt(2));
-            } while(fila.moveToNext() );
+            }
+            while(fila.moveToNext() );
         }
         else{
             listaContactos.add("No se encontraron contactos en la base de datos");

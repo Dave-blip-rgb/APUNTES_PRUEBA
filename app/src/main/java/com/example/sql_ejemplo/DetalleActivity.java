@@ -53,12 +53,23 @@ public class DetalleActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        Intent intent_actual = getIntent();
+        int id_actual = intent_actual.getIntExtra("id_actual", -1);
+
+        cargarContacto(id_actual);
+    }
+
     public void cargarContacto(int id)
     {
         ContactosSQLOpenHelper admin = new ContactosSQLOpenHelper(this);
         SQLiteDatabase db = admin.getReadableDatabase();
 
-        Cursor fila = db.rawQuery("SELECT id, nombre, telefono FROM contactos Where id="+id_actual, null);
+        Cursor fila = db.rawQuery("SELECT id, nombre, telefono FROM contactos Where id=" + id, null);
 
         if (fila.moveToFirst())
         {
@@ -82,7 +93,7 @@ public class DetalleActivity extends AppCompatActivity {
         ContactosSQLOpenHelper admin = new ContactosSQLOpenHelper(this);
         SQLiteDatabase db = admin.getWritableDatabase();
 
-        db.delete("contactos", "id="+id_actual, null);
+        db.delete("contactos", "id=" + id, null);
         db.close();
 
         Toast.makeText(this, "El contacto fue eliminado", Toast.LENGTH_SHORT).show();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+//BASE DE DATOS
 public class ContactosSQLOpenHelper extends SQLiteOpenHelper
 {
     //DEFINIR LA INFORMACION DE SU BASE DE DATOS
